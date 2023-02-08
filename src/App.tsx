@@ -1,29 +1,39 @@
-import { Component } from "react";
+import { ChangeEvent, Component } from "react";
+import { getData } from "./utils/get-data";
 import "./App.css";
 
 import CardList from "./components/card-list/card-list.component";
 import SearchBox from "./components/search-box/search-box.component";
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
+export interface Monster {
+  id: string;
+  name: string;
+  email: string;
+};
+
+interface State {
+  monsters: Monster[],
+  searchField: string
+};
+
+class App extends Component<{}, State> {
+  constructor(props: {}) {
+    super(props);
+    this.state= {
       monsters: [],
       searchField: "",
     };
-  }
+  };
 
   componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((monstersData) =>
-        this.setState(() => {
-          return { monsters: monstersData };
-        })
-      );
+    const fetchMonsters = async () => {
+      const monsters = await getData<Monster[]>("https://jsonplaceholder.typicode.com/users");
+      this.setState({monsters: monsters});
+    } 
+    fetchMonsters();
   }
 
-  onSearchChange = (event) => {
+  onSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const searchField = event.target.value.toLowerCase();
     this.setState(() => {
       return { searchField };

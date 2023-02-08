@@ -1,7 +1,14 @@
 import { Component } from "react";
+import { ChangeEvent } from "react";
 import "./search-box.styles.css";
 
-class SearchBox extends Component {
+interface SearchBoxProps {
+  className: string;
+  placeholder?: string;
+  onChangeHandler: (event: ChangeEvent<HTMLInputElement>) => void;
+};
+
+class SearchBox extends Component<SearchBoxProps> {
   render() {
     return (
       <input
